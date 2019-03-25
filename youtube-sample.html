@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport">
+<style>
+  body::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    background: url(https://den8lgfpmzfo0.cloudfront.net/photo/239528);
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+    z-index: -1;
+  }
+  html,body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  .nav {
+    background: rgb(64,64,64);
+    height: 32px;
+    color: white;
+    line-height: 32px;
+  }
+  .header {
+    background: white;
+    height: 32px;
+  }
+  .header img {
+    height: 32px;
+    line-height: 0;
+  }
+  .container {
+    width: 375px;
+    margin: 0 auto;
+  }
+  body > .container-wrapper {
+    background-color: #ffffffaa;
+    height: 100%;
+  }
+  h1,h2 {
+    margin: 0;
+  }
+</style>
+</head>
+<html>
+  <body>
+    <div class="header">
+      <div class="container">
+        <img src="https://assets.game8.jp/assets/logo-e74fae4841ddbf471acc5645600a41d85a27947a946b4a362cffdbe8cfd90d1c.png">
+      </div>
+    </div>
+    <div class="nav">
+      <div class="container">動画攻略</div>
+    </div>
+    <div class="container-wrapper">
+      <div class="container">
+        <h1>やっさん＆にゃんにゃん動画だよ</h1>
+  
+        <div id="player" ></div>
+  
+        <div class="controller">
+  
+  
+          <h2>超ギガレアはこういうやつ…！？</h2>
+          <button onclick="play1();" id="button1" disabled class="play-button">プレーヤー準備中</button>
+          <br>
+      
+          <h2>これで出るんすよ</h2>
+          <button onclick="play2();" id="button2" disabled class="play-button">プレーヤー準備中</button>
+          <br>
+      
+          <h2>ｷﾀ━━━━(ﾟ∀ﾟ)━━━━!!</h2>
+          <button onclick="play3();" id="button3" disabled class="play-button">プレーヤー準備中</button>
+        </div>
+  
+          
+      </div>
+    </div>
+    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+    
+
+    
+    <script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '210',
+          width: '375',
+          videoId: 'APTZKDNRQUs',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        //event.target.playVideo();
+        resetLabel();
+      }
+      function resetLabel() {
+        for(let el of document.getElementsByClassName('play-button')){
+          el.textContent = '再生';
+          el.disabled = false;
+        }
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      var timer = null;
+      function onPlayerStateChange(event) {
+        //if (event.data == YT.PlayerState.PLAYING && !done) {
+        //  setTimeout(stopVideo, 6000);
+        //  done = true;
+        //}
+      }
+      function stopVideo() {
+        player.pauseVideo();
+        done = false;
+        clearTimeout(timer);
+      }
+
+      function play1() {
+        plays(7*60+14, document.getElementById('button1'));
+      }
+      function play2() {
+        plays(9*60+14, document.getElementById('button2'));
+      }
+      function play3() {
+        plays(10*60+14, document.getElementById('button3'));
+      }
+
+      function plays(seconds, el) {
+        c = el.textContent;
+        if(c == '停止') {
+          stopVideo();
+          resetLabel();
+        }
+        else {
+          playVideo(seconds);
+          resetLabel();
+          el.textContent = '停止';
+        }
+      }
+
+      loopSeconds = 0;
+
+      function playVideo(seconds) {
+        loopSeconds = seconds;
+        player.seekTo(seconds, true);
+        player.playVideo();
+        clearTimeout(timer);
+        //timer = setTimeout(stopVideo, 6000);
+        timer = setTimeout(loopVideo, 6000);
+      }
+      function loopVideo() {
+        player.seekTo(loopSeconds, true);
+        player.playVideo();
+        clearTimeout(timer);
+        timer = setTimeout(loopVideo, 6000);
+      }
+    </script>
+  </body>
+</html>
